@@ -166,8 +166,8 @@ export default function MoviesPage() {
                 {searchTerm ? "Film tidak ditemukan" : "Belum ada film"}
               </h3>
               <p className="text-gray-500 mb-4 text-sm">
-                {searchTerm 
-                  ? `Tidak ada film yang cocok dengan "${searchTerm}"`
+                {searchTerm
+                  ? `Tidak ada film yang cocok dengan &ldquo;${searchTerm}&rdquo;`
                   : "Mulai tambahkan film pertama Anda"
                 }
               </p>

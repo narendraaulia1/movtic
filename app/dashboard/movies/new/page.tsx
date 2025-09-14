@@ -52,29 +52,8 @@ export default function NewMoviePage() {
     }
   };
 
-  const validateForm = (): boolean => {
-    const errors: string[] = [];
-    
-    if (!formData.title.trim()) {
-      errors.push("Judul film harus diisi");
-    } else if (formData.title.length > 255) {
-      errors.push("Judul film maksimal 255 karakter");
-    }
-    
-    if (!formData.description.trim()) {
-      errors.push("Deskripsi film harus diisi");
-    } else if (formData.description.length > 1000) {
-      errors.push("Deskripsi film maksimal 1000 karakter");
-    }
-    
-    if (!formData.duration.trim()) {
-      errors.push("Durasi film harus diisi");
-    }
-    
-    setValidationErrors(errors);
-    return errors.length === 0;
-  };
-
+  // Fix for ESLint no-explicit-any error: specify type for err in catch block
+  // Change catch (err: any) to catch (err: unknown) and handle accordingly
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -111,13 +90,42 @@ export default function NewMoviePage() {
         router.push("/dashboard/movies");
       }, 1500);
 
-    } catch (err: any) {
-      console.error("Submit error:", err);
-      setError("Gagal menambahkan film, periksa koneksi internet");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Submit error:", err.message);
+        setError("Gagal menambahkan film, periksa koneksi internet");
+      } else {
+        setError("Gagal menambahkan film, periksa koneksi internet");
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+    
+    if (!formData.title.trim()) {
+      errors.push("Judul film harus diisi");
+    } else if (formData.title.length > 255) {
+      errors.push("Judul film maksimal 255 karakter");
+    }
+    
+    if (!formData.description.trim()) {
+      errors.push("Deskripsi film harus diisi");
+    } else if (formData.description.length > 1000) {
+      errors.push("Deskripsi film maksimal 1000 karakter");
+    }
+    
+    if (!formData.duration.trim()) {
+      errors.push("Durasi film harus diisi");
+    }
+    
+    setValidationErrors(errors);
+    return errors.length === 0;
+  };
+
+  // Removed duplicate handleSubmit function to fix redeclaration error
 
   const handleCancel = () => {
     router.push("/dashboard/movies");
