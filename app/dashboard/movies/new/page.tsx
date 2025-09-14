@@ -102,6 +102,8 @@ export default function NewMoviePage() {
     }
   };
 
+  // Remove duplicate handleSubmit function to fix redeclaration error
+
   const validateForm = (): boolean => {
     const errors: string[] = [];
     

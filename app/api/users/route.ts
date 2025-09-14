@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET semua member
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const members = await prisma.user.findMany({
       where: { role: "MEMBER" },
