@@ -1,20 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowRight, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+interface Errors {
+  general?: string;
+}
+
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Errors>({});
 
   // Password strength checker
-  const getPasswordStrength = (pass) => {
+  const getPasswordStrength = (pass: string) => {
     let score = 0;
     if (pass.length >= 8) score++;
     if (/[A-Z]/.test(pass)) score++;
@@ -28,7 +32,7 @@ export default function RegisterPage() {
   const strengthColors = ["bg-red-500", "bg-red-400", "bg-yellow-400", "bg-blue-400", "bg-green-400"];
   const strengthLabels = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({});
@@ -65,9 +69,7 @@ export default function RegisterPage() {
       </div>
       
       <div className="relative w-full max-w-lg">
-        {/* Main card */}
         <div className="bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-8 shadow-2xl shadow-purple-900/20">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="relative inline-block mb-4">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-400 rounded-3xl mx-auto flex items-center justify-center shadow-lg">
@@ -163,8 +165,7 @@ export default function RegisterPage() {
                 </button>
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               </div>
-              
-              {/* Password strength indicator */}
+
               {password && (
                 <div className="space-y-2 mt-3">
                   <div className="flex gap-1">
@@ -178,7 +179,16 @@ export default function RegisterPage() {
                     ))}
                   </div>
                   <p className="text-xs text-gray-400">
-                    Password strength: <span className={`font-medium ${passwordStrength >= 3 ? "text-green-400" : passwordStrength >= 2 ? "text-yellow-400" : "text-red-400"}`}>
+                    Password strength:{" "}
+                    <span
+                      className={`font-medium ${
+                        passwordStrength >= 3
+                          ? "text-green-400"
+                          : passwordStrength >= 2
+                          ? "text-yellow-400"
+                          : "text-red-400"
+                      }`}
+                    >
                       {strengthLabels[passwordStrength - 1] || "Very Weak"}
                     </span>
                   </p>
@@ -186,7 +196,6 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Error message */}
             {errors.general && (
               <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm flex items-center gap-2">
                 <div className="w-2 h-2 bg-red-400 rounded-full flex-shrink-0" />
@@ -194,8 +203,6 @@ export default function RegisterPage() {
               </div>
             )}
 
-
-            {/* Register button */}
             <button
               type="submit"
               disabled={isLoading || !name || !email || !password || passwordStrength < 2}
@@ -212,18 +219,16 @@ export default function RegisterPage() {
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
-              {/* Button glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-30 -z-10" />
             </button>
           </form>
 
-          {/* Login link */}
           <div className="text-center mt-8 pt-6 border-t border-gray-700/30">
             <span className="text-gray-400 text-sm">
               Already have an account?{" "}
               <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
-                 Sign in
-                </Link>
+                Sign in
+              </Link>
             </span>
           </div>
         </div>

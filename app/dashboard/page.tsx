@@ -3,8 +3,27 @@
 import { useEffect, useState } from "react"
 import { Clapperboard, Clock, Ticket, Receipt, Users, TrendingUp, Calendar, Star } from "lucide-react"
 
+// Tambahkan interface tipe data dashboard
+interface Showtime {
+  id: string
+  movie: {
+    title: string
+    genre?: string
+  }
+  startTime: string
+}
+
+interface DashboardData {
+  moviesCount: number
+  showtimesCount: number
+  ticketsCount: number
+  transactionsCount: number
+  usersCount: number
+  todayShowtimes: Showtime[]
+}
+
 export default function DashboardPage() {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<DashboardData | null>(null) // kasih tipe null atau DashboardData
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -124,12 +143,11 @@ export default function DashboardPage() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-10">
-          {items.map((item, index) => (
+          {items.map((item) => (
             <div
               key={item.title}
               className="group bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6 shadow-lg hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
             >
-              {/* Gradient overlay on hover */}
               <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity rounded-2xl`}></div>
               
               <div className="relative">
@@ -177,12 +195,11 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.todayShowtimes.map((show) => (
+              {data.todayShowtimes.map((show: Showtime) => ( // <--- tambahkan tipe Showtime
                 <div
                   key={show.id}
                   className="group bg-gray-800/60 border border-gray-700/40 rounded-2xl p-6 shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                 >
-                  {/* Gradient border on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
                   
                   <div className="relative">

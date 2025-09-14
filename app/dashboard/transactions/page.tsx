@@ -415,7 +415,7 @@ export default function TransactionsPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="text-white font-medium text-sm truncate">{tr.showtime.movie.title}</h3>
                             <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(tr.status)}`}>
-                              {tr.status === 'COMPLETED' ? 'SELESAI' : 'BATAL'}
+                              {tr.status.toUpperCase() === 'COMPLETED' ? 'SELESAI' : 'BATAL'}
                             </span>
                           </div>
                           
