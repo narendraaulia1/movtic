@@ -1,4 +1,4 @@
-import { Clock, Home, Clapperboard, Ticket, Receipt, Users, LogOut } from "lucide-react"
+import { Clock, Home, Clapperboard, Ticket, Receipt, Users } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -24,7 +24,6 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {/* Group Menu Utama */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-grey-400">Menu</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -40,7 +39,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
 
-              {/* Tambahkan Logout di paling bawah */}
+              {/* Logout */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <LogoutButton />
