@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trash2, CheckCircle, AlertCircle, User, Plus, X, Search, Filter, Edit3, UserPlus, Mail, Phone, Shield, Users, Calendar } from "lucide-react";
+import { Trash2, CheckCircle, AlertCircle, User, X, Search, Filter, Edit3, UserPlus, Mail, Phone, Shield, Users, Calendar } from "lucide-react";
 
 interface User {
   id: string;
@@ -171,6 +171,40 @@ export default function UsersPage() {
           </button>
         </div>
 
+        {/* Search and Filter */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Cari user..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white border border-gray-600/50 focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value as "ALL" | "MEMBER" | "ADMIN")}
+              className="pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white border border-gray-600/50 focus:border-blue-500 focus:outline-none"
+            >
+              <option value="ALL">Semua Role</option>
+              <option value="MEMBER">Member</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Messages */}
+        {(error || success) && (
+          <div className={`p-4 rounded-xl border ${error ? 'bg-red-500/20 border-red-500/30 text-red-300' : 'bg-green-500/20 border-green-500/30 text-green-300'} flex items-center gap-3`}>
+            {error ? <AlertCircle className="w-5 h-5" /> : <CheckCircle className="w-5 h-5" />}
+            {error || success}
+          </div>
+        )}
+
         {/* Users Grid */}
         <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl overflow-hidden">
           {loading ? (
@@ -185,9 +219,26 @@ export default function UsersPage() {
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                       <User className="w-6 h-6 text-white" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-white font-semibold">{user.name}</p>
-                      <p className="text-gray-400 text-sm">{user.email}</p>
+                      <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <Mail className="w-4 h-4" />
+                        {user.email}
+                      </div>
+                      {user.phone && (
+                        <div className="flex items-center gap-2 text-gray-400 text-sm">
+                          <Phone className="w-4 h-4" />
+                          {user.phone}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <Calendar className="w-4 h-4" />
+                        {formatDate(user.createdAt)}
+                      </div>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${getRoleColor(user.role)}`}>
+                      {getRoleIcon(user.role)}
+                      {user.role}
                     </div>
                   </div>
                   <div className="flex gap-2">
