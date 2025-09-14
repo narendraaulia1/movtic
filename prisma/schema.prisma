@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  duration    String
+  createdAt   DateTime   @default(now())
+  showtimes   Showtime[] // relasi balik ke Showtime
+}
+
+model Showtime {
+  id           String        @id @default(uuid())
+  movieId      String
+  movie        Movie         @relation(fields: [movieId], references: [id])
+  startTime    DateTime
+  tickets      Ticket[]
+  transactions Transaction[]
+}
+
+model Ticket {
+  id         String   @id @default(uuid())
+  seat       String
+  price      Float
+  showtimeId String
+  showtime   Showtime @relation(fields: [showtimeId], references: [id])
+  isSold     Boolean  @default(false) // status tiket
+  createdAt  DateTime @default(now())
+}
+
+// Hapus seluruh model Transaction
+// model Transaction {
+//   id        String   @id @default(uuid())
+//   tickets   Ticket[]
+//   total     Float
+//   status    String
+//   createdAt DateTime @default(now())
+// }
+
+model Transaction {
+  id            String            @id @default(uuid())
+  customerName  String?
+  customerPhone String?
+  memberId      String? // opsional, kalau ada member
+  showtimeId    String
+  showtime      Showtime          @relation(fields: [showtimeId], references: [id])
+  seats         Int               @default(1)
+  totalPrice    Float
+  paymentMethod PaymentMethod
+  status        TransactionStatus @default(COMPLETED)
+  createdAt     DateTime          @default(now())
+}
+
+enum PaymentMethod {
+  CASH
+  DEBIT
+}
+
+enum TransactionStatus {
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  phone    String?  // opsional
+  role     UserRole @default(MEMBER)
+  createdAt DateTime @default(now())
+  password  String
+}
+
+enum UserRole {
+  MEMBER
+  ADMIN
+}
