@@ -5,9 +5,6 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
-import LogoutButton from "@/components/LogoutButton";
-
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
